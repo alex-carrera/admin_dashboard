@@ -1,59 +1,90 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:admin_dashboard/providers/login_form_provider.dart';
 import 'package:admin_dashboard/router/router.dart';
 import 'package:admin_dashboard/ui/buttons/custom_outlined_button.dart';
 import 'package:admin_dashboard/ui/buttons/link_text.dart';
-import 'package:flutter/material.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 100),
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Center(
-          child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 370),
-        child: Form(
-            child: Column(
-          children: [
-            //email
-            TextFormField(
-              style: TextStyle(color: Colors.white),
-              decoration: buildInputDecoration(
-                  hint: 'Ingrese su correo',
-                  label: 'Email',
-                  icon: Icons.email_outlined),
+    
+    return ChangeNotifierProvider(
+      create: (_) => LoginFormProvider(),
+      child: Builder(builder: (context) {
+        final loginFormProvider =
+            Provider.of<LoginFormProvider>(context, listen: false);
+        return Container(
+          margin: EdgeInsets.only(top: 100),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 370),
+              child: Form(
+                  autovalidateMode: AutovalidateMode
+                      .always, //hace que el formulario se valide apenas se inscribe
+                  key: loginFormProvider.formKey,
+                  child: Column(
+                    children: [
+                      //email
+                      TextFormField(
+                        validator: (value) {
+                          if (!EmailValidator.validate(value ?? ''))
+                            return 'Email no valido';
+
+                          return null;
+                        },
+                        onChanged: (value) => loginFormProvider.email = value,
+                        style: TextStyle(color: Colors.white),
+                        decoration: buildInputDecoration(
+                            hint: 'Ingrese su correo',
+                            label: 'Email',
+                            icon: Icons.email_outlined),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      //Password
+                      TextFormField(
+                        onChanged: (value) =>
+                            loginFormProvider.password = value,
+                        validator: (value) {
+                          if (value == null) return 'Ingrese su contraseña';
+                          if (value.length < 6)
+                            return 'La contraseña debe tener mas de 6 digitos';
+                          return null;
+                        },
+                        obscureText: true,
+                        style: TextStyle(color: Colors.white),
+                        decoration: buildInputDecoration(
+                            hint: '******',
+                            label: 'Contraseña',
+                            icon: Icons.lock_outline_rounded),
+                      ),
+
+                      SizedBox(height: 20),
+                      CustomOutlinedButton(
+                        onPressed: () {
+                          loginFormProvider.validateForm();
+                        },
+                        text: 'Ingresar',
+                      ),
+
+                      SizedBox(height: 20),
+                      LinkText(
+                        text: 'Nueva cuenta',
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, Flurorouter.registerRoute);
+                        },
+                      )
+                    ],
+                  )),
             ),
-
-            SizedBox(height: 20),
-
-            //Password
-            TextFormField(
-              obscureText: true,
-              style: TextStyle(color: Colors.white),
-              decoration: buildInputDecoration(
-                  hint: '******',
-                  label: 'Contraseña',
-                  icon: Icons.lock_outline_rounded),
-            ),
-
-            SizedBox(height: 20),
-            CustomOutlinedButton(
-              onPressed: () {},
-              text: 'Ingresar',
-            ),
-
-            SizedBox(height: 20),
-            LinkText(
-              text: 'Nueva cuenta',
-              onPressed: () {
-                Navigator.pushNamed(context, Flurorouter.registerRoute);
-              },
-            )
-          ],
-        )),
-      )),
+          ),
+        );
+      }),
     );
   }
 
