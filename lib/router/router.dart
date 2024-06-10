@@ -3,7 +3,7 @@ import 'package:admin_dashboard/router/no_page_found_handlers.dart';
 import 'package:fluro/fluro.dart';
 
 class Flurorouter {
-  static final FluroRouter router = new FluroRouter();
+  static final FluroRouter router = FluroRouter();
 
   // root Route
   static String rootRoute = '/';
@@ -16,11 +16,12 @@ class Flurorouter {
   static String dashboardRoute = '/dashboard';
 
   static void configureRoutes() {
-    router.define(rootRoute, handler: AdminHandlers.login);
-    router.define(loginRoute, handler: AdminHandlers.login);
-    // TODO: Por crear
-    // router.define(registerRoute, handler: AdminHandlers.register);
-    // router.define(dashboardRoute, handler: AdminHandlers.dashboard);
+
+    //Auth Routes
+    router.define(rootRoute, handler: AdminHandlers.login, transitionType: TransitionType.none);
+    router.define(loginRoute, handler: AdminHandlers.login, transitionType: TransitionType.none);
+    router.define(registerRoute, handler: AdminHandlers.register, transitionType: TransitionType.none);
+    
 
     //404
     router.notFoundHandler = NoPageFoundHandlers.noPageFound;
