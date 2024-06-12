@@ -48,7 +48,7 @@ class _CategoryModalState extends State<CategoryModal> {
     return Container(
       padding: EdgeInsets.all(20),
       height: 500,
-      width: 300, // expanded
+      // width: 300, // expanded
       decoration: buildBoxDecoration(),
       child: Column(
         children: [

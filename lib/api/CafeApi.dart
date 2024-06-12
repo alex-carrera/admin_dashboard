@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:admin_dashboard/services/local_storage.dart';
 import 'package:dio/dio.dart';
 
@@ -10,6 +12,7 @@ class CafeApi {
 
     // Base del url
     _dio.options.baseUrl = 'http://localhost:8080/api';
+    //_dio.options.baseUrl = 'https://flutter-web-admin.herokuapp.com/api';
 
     // Configurar Headers
     _dio.options.headers = {
@@ -26,8 +29,8 @@ class CafeApi {
       return resp.data;
 
 
-    } catch (e) {
-      print(e);
+    } on DioError catch (e) {
+      print(e.response);
       throw('Error en el GET');
     }
   }
@@ -41,7 +44,7 @@ class CafeApi {
         final resp = await _dio.post(path, data: formData );
         return resp.data;
 
-      } catch (e) {
+      } on DioError catch (e) {
         print(e);
         throw('Error en el POST');
       }
@@ -73,11 +76,33 @@ class CafeApi {
         final resp = await _dio.delete(path, data: formData );
         return resp.data;
 
-      } catch (e) {
+      } on DioError catch (e) {
         print(e);
         throw('Error en el delete');
       }
     }
 
+
+
+  static Future uploadFile( String path, Uint8List bytes ) async {
+
+      final formData = FormData.fromMap({
+        'archivo': MultipartFile.fromBytes(bytes)
+      });
+
+      try {
+        
+        final resp = await _dio.put(
+          path, 
+          data: formData 
+        );
+        
+        return resp.data;
+
+      } on DioError catch (e) {
+        print(e);
+        throw('Error en el PUT $e');
+      }
+    }
 
 }
