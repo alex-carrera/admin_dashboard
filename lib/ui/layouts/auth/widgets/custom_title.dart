@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTitle extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric( horizontal: 20 ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -16,7 +15,7 @@ class CustomTitle extends StatelessWidget {
             height: 50,
           ),
 
-          SizedBox(height: 20),
+          SizedBox( height: 20 ),
 
           FittedBox(
             fit: BoxFit.contain,
@@ -27,10 +26,8 @@ class CustomTitle extends StatelessWidget {
                 color: Colors.white,
                 fontWeight: FontWeight.bold
               ),
-            )
+            ),
           )
-
-
         ],
       ),
     );

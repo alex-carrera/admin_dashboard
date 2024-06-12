@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
 class WhiteCard extends StatelessWidget {
 
   final String? title;
@@ -13,8 +14,6 @@ class WhiteCard extends StatelessWidget {
     this.title,
     this.width,
   }) : super(key: key);
-
-  
 
 
   @override
